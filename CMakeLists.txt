@@ -167,15 +167,15 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib64)
 ################################################################################
 # Install the data directory in the install folder
 ################################################################################
- install(FILES data/interaction.yaml     DESTINATION include/kappa++_data)
- install(FILES data/particles.yaml       DESTINATION include/kappa++_data)
+install(FILES data/interaction.yaml     DESTINATION include/kappa++_data)
+install(FILES data/particles.yaml       DESTINATION include/kappa++_data)
 
-if (DEFINED KAPPA_DATA_COPY AND NOT KAPPA_DATA_COPY)
+if (DEFINED KAPPA_DATA_COPY AND KAPPA_DATA_COPY)
    if (NOT DEFINED KAPPA_DIST_DATA_DIR) 
-     set(KAPPA_DIST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+      set(KAPPA_DIST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR})
    endif()
    add_custom_target(copy_game_assets ALL
-      COMMAND ${CMAKE_COMMAND} -E copy "data/interaction.yaml data/particles.yaml" "${KAPPA_DIST_DATA_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml data/particles.yaml" "${KAPPA_DIST_DATA_DIR}"
       COMMENT "Copying data"
    )
 endif()
