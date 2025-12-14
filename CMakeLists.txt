@@ -175,7 +175,8 @@ if (DEFINED KAPPA_DATA_COPY AND KAPPA_DATA_COPY)
       set(KAPPA_DIST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR})
    endif()
    add_custom_target(copy_game_assets ALL
-      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml data/particles.yaml" "${KAPPA_DIST_DATA_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml" "${KAPPA_DIST_DATA_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/particles.yaml" "${KAPPA_DIST_DATA_DIR}"
       COMMENT "Copying data"
    )
 endif()
