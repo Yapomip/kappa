@@ -39,6 +39,15 @@ or briefly,
 
 `sudo apt-get install libopenblas-dev libarmadillo-dev libyaml-cpp-dev catch`
 
+## CMAKE flags and variables
+ENABLE_TESTING, ENABLE_COVERAGE - ON/OFF for testing and examples build
+
+KAPPA_DATA_COPY - is need to copy files
+    defoult not defined
+KAPPA_DIST_DATA_DIR - dir to copy from /data 
+    defoult value CMAKE_CURRENT_SOURCE_DIR
+
+
 ## Source code structure
 
 * Files in /src/approximations implement the various (state-to-state, multi- and one-temperature) kinetic theory approximations:

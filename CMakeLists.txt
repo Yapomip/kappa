@@ -39,7 +39,7 @@ project(kappa++
 )
 
 # Add include path for cmake modules
- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ################################################################################
 # Build types
@@ -170,6 +170,16 @@ project(kappa++
 ################################################################################
  install(FILES data/interaction.yaml     DESTINATION include/kappa++_data)
  install(FILES data/particles.yaml       DESTINATION include/kappa++_data)
+
+if (DEFINED KAPPA_DATA_COPY AND NOT KAPPA_DATA_COPY)
+   if (NOT DEFINED KAPPA_DIST_DATA_DIR) 
+     set(KAPPA_DIST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+   endif()
+   add_custom_target(copy_game_assets ALL
+      COMMAND ${CMAKE_COMMAND} -E copy "data/interaction.yaml data/particles.yaml" "${KAPPA_DIST_DATA_DIR}"
+      COMMENT "Copying data"
+   )
+endif()
 
 ################################################################################
 # CTest

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 # Add sources for a target
 #  ADD_SOURCES(<target> <source1> [<source2> ...])
  function (add_sources target)
@@ -32,6 +32,17 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
  target_link_libraries(kappa++ ${YAML_LIBRARY})
  target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
  install(TARGETS kappa++ DESTINATION lib)
+
+ target_include_directories(kappa++ PUBLIC 
+  $<INSTALL_INTERFACE:include/kappa++>
+  $<BUILD_INTERFACE:
+    approximations
+    interactions
+    mixtures
+    numerics
+    particles
+  >
+)
 
  # Evaluate coverage
  if(ENABLE_COVERAGE)
