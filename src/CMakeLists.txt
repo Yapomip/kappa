@@ -29,9 +29,15 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
  get_property(kappa++_SRCS GLOBAL PROPERTY kappa++_SRCS)
  add_library(kappa++ SHARED ${kappa++_SRCS})
- target_link_libraries(kappa++ ${YAML_LIBRARY})
+ target_link_libraries(kappa++ yaml-cpp)
  target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
  install(TARGETS kappa++ DESTINATION lib)
+
+ # Evaluate coverage
+ if(ENABLE_COVERAGE)
+     add_coverage(kappa++)
+ endif()
+
 
  target_include_directories(kappa++ PUBLIC 
   $<INSTALL_INTERFACE:include/kappa++>
@@ -43,8 +49,3 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
     particles
   >
 )
-
- # Evaluate coverage
- if(ENABLE_COVERAGE)
-     add_coverage(kappa++)
- endif()

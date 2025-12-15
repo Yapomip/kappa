@@ -9,12 +9,12 @@ endfunction (add_coverage)
 # Add coverage support for target ${TNAME} and register target for coverage evaluation.
 function(add_coverage_target TNAME)
     target_compile_options(${TNAME} 
-        PUBLIC
+        # PUBLIC
             ${COVERAGE_FLAGS}
     )
 
     target_link_libraries(${TNAME}
-        PUBLIC
+        # PUBLIC
             gcov
     )
 endfunction(add_coverage_target)
