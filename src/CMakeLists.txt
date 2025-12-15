@@ -21,39 +21,43 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
   set_property(GLOBAL APPEND PROPERTY "${target}_SRCS" "${SRCS}")
  endfunction()
 
- add_subdirectory(approximations)
- add_subdirectory(interactions)
- add_subdirectory(mixtures)
- add_subdirectory(numerics)
- add_subdirectory(particles)
-
-get_property(kappa++_SRCS GLOBAL PROPERTY kappa++_SRCS)
-add_library(kappa++ SHARED ${kappa++_SRCS})
-# target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
-
-target_link_libraries(kappa++ yaml-cpp)
-
-target_link_libraries(kappa++ armadillo)
-# target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
-
-target_link_libraries(kappa++ BLAS::BLAS)
-target_link_libraries(kappa++ LAPACK::LAPACK)
-# target_link_libraries(kappa++ ${OPENBLAS_LIBRARY})
-install(TARGETS kappa++ DESTINATION lib)
-
- # Evaluate coverage
- if(ENABLE_COVERAGE)
-     add_coverage(kappa++)
- endif()
-
-
- target_include_directories(kappa++ PUBLIC 
-  $<INSTALL_INTERFACE:include/kappa++>
-  $<BUILD_INTERFACE:
-    approximations
-    interactions
-    mixtures
-    numerics
-    particles
-  >
+file(GLOB_RECURSE LIB_SOURCES 
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    "approximations/*.cpp"
+    "interactions/*.cpp"
+    "mixtures/*.cpp"
+    "numerics/*.cpp"
+    "particles/*.cpp"
 )
+message("${LIB_SOURCES}")
+add_library(kappa++ SHARED ${LIB_SOURCES})
+
+target_link_libraries(kappa++ yaml-cpp armadillo BLAS::BLAS LAPACK::LAPACK)
+
+# target_link_libraries(kappa++ ${OPENBLAS_LIBRARY})
+target_include_directories(kappa++ PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/approximations>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/interactions>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mixtures>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/numerics>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/particles>
+    $<INSTALL_INTERFACE:include/kappa++>
+)
+message(${CMAKE_CURRENT_SOURCE_DIR})
+
+
+install(TARGETS kappa++ EXPORT kappa++_targets 
+    LIBRARY DESTINATION lib 
+    INCLUDES DESTINATION include
+)
+
+install(EXPORT kappa++_targets
+    FILE kappa++Config.cmake
+    DESTINATION "cmake"
+)
+
+# Evaluate coverage
+if(ENABLE_COVERAGE)
+    add_coverage(kappa++)
+endif()
+
