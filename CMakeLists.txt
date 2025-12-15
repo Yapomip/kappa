@@ -128,6 +128,33 @@ project(kappa++
         SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
  endif()
 
+#################################################################################
+# Find the required packages: OpenBLAS(Blas, Lapack), Armadillo, Yaml-cpp, Boost
+#################################################################################
+
+# add_library(Yaml INTERFACE IMPORTED)
+# set_property(TARGET Yaml PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${YAML_INCLUDE_DIR})
+# include_directories(${YAML_INCLUDE_DIRS})
+# LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib)
+
+find_package(LAPACK REQUIRED)
+message("${LAPACK_LAPACK_LIBRARIES}")
+
+find_package(BLAS REQUIRED)
+message("${BLAS_LIBRARIES}")
+
+find_package(yaml-cpp REQUIRED)
+message("${YAML_CPP_LIBRARIES}")
+
+find_package(Armadillo REQUIRED)
+message("${ARMADILLO_LIBRARIES}")
+
+# find_package(Armadillo REQUIRED)
+# add_library(Armadillo INTERFACE IMPORTED)
+# set_property(TARGET Armadillo PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ARMADILLO_INCLUDE_DIR})
+# include_directories(${ARMADILLO_INCLUDE_DIRS})
+# LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib64)
+
 ################################################################################
 # Source code
 ################################################################################
@@ -145,24 +172,6 @@ project(kappa++
     ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics
     ${CMAKE_CURRENT_SOURCE_DIR}/src/particles)
  add_subdirectory(src)
-
-#################################################################################
-# Find the required packages: OpenBLAS(Blas, Lapack), Armadillo, Yaml-cpp, Boost
-#################################################################################
-
-find_package(Yaml REQUIRED)
-add_library(Yaml INTERFACE IMPORTED)
-set_property(TARGET Yaml PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${YAML_INCLUDE_DIR})
-include_directories(${YAML_INCLUDE_DIRS})
-LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib)
-
-find_package(BlasLapack)
-
-find_package(Armadillo REQUIRED)
-add_library(Armadillo INTERFACE IMPORTED)
-set_property(TARGET Armadillo PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ARMADILLO_INCLUDE_DIR})
-include_directories(${ARMADILLO_INCLUDE_DIRS})
-LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib64)
 
 ################################################################################
 # Install the data directory in the install folder

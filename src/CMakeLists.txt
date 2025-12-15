@@ -27,11 +27,19 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
  add_subdirectory(numerics)
  add_subdirectory(particles)
 
- get_property(kappa++_SRCS GLOBAL PROPERTY kappa++_SRCS)
- add_library(kappa++ SHARED ${kappa++_SRCS})
- target_link_libraries(kappa++ yaml-cpp)
- target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
- install(TARGETS kappa++ DESTINATION lib)
+get_property(kappa++_SRCS GLOBAL PROPERTY kappa++_SRCS)
+add_library(kappa++ SHARED ${kappa++_SRCS})
+# target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
+
+target_link_libraries(kappa++ yaml-cpp)
+
+target_link_libraries(kappa++ armadillo)
+# target_link_libraries(kappa++ ${ARMADILLO_LIBRARY})
+
+target_link_libraries(kappa++ BLAS::BLAS)
+target_link_libraries(kappa++ LAPACK::LAPACK)
+# target_link_libraries(kappa++ ${OPENBLAS_LIBRARY})
+install(TARGETS kappa++ DESTINATION lib)
 
  # Evaluate coverage
  if(ENABLE_COVERAGE)
