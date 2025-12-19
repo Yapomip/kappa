@@ -81,8 +81,8 @@ project(kappa++
 # Install prefix settings
 ################################################################################
 
- set(CMAKE_INSTALL_PREFIX "../install" CACHE STRING
-    "Install path prefix, prepended onto install directories." FORCE)
+# set(CMAKE_INSTALL_PREFIX "../install" CACHE STRING
+#    "Install path prefix, prepended onto install directories." FORCE)
  mark_as_advanced(CMAKE_INSTALL_PREFIX)
 
  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm -pg" )
@@ -179,14 +179,11 @@ message("${ARMADILLO_LIBRARIES}")
 install(FILES data/interaction.yaml     DESTINATION include/kappa++_data)
 install(FILES data/particles.yaml       DESTINATION include/kappa++_data)
 
-if (DEFINED KAPPA_DATA_COPY AND KAPPA_DATA_COPY)
-   if (NOT DEFINED KAPPA_DIST_DATA_DIR) 
-      set(KAPPA_DIST_DATA_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-   endif()
+if (DEFINED KAPPA_DATA_COPY_DIR)
    add_custom_target(copy_resures_files ALL
-      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml" "${KAPPA_DIST_DATA_DIR}"
-      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/particles.yaml" "${KAPPA_DIST_DATA_DIR}"
-      COMMENT "Copying data to ${KAPPA_DIST_DATA_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml" "${KAPPA_DATA_COPY_DIR}"
+      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/particles.yaml" "${KAPPA_DATA_COPY_DIR}"
+      COMMENT "Copying data to ${KAPPA_DATA_COPY_DIR}"
    )
 endif()
 
