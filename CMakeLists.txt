@@ -138,16 +138,16 @@ project(kappa++
 # LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib)
 
 find_package(LAPACK REQUIRED)
-message("${LAPACK_LAPACK_LIBRARIES}")
+# message("${LAPACK_LAPACK_LIBRARIES}")
 
 find_package(BLAS REQUIRED)
-message("${BLAS_LIBRARIES}")
+# message("${BLAS_LIBRARIES}")
 
 find_package(yaml-cpp REQUIRED)
-message("${YAML_CPP_LIBRARIES}")
+# message("${YAML_CPP_LIBRARIES}")
 
 find_package(Armadillo REQUIRED)
-message("${ARMADILLO_LIBRARIES}")
+# message("${ARMADILLO_LIBRARIES}")
 
 # find_package(Armadillo REQUIRED)
 # add_library(Armadillo INTERFACE IMPORTED)
@@ -176,16 +176,53 @@ message("${ARMADILLO_LIBRARIES}")
 ################################################################################
 # Install the data directory in the install folder
 ################################################################################
-install(FILES data/interaction.yaml     DESTINATION include/kappa++_data)
-install(FILES data/particles.yaml       DESTINATION include/kappa++_data)
 
-if (DEFINED KAPPA_DATA_COPY_DIR)
-   add_custom_target(copy_resures_files ALL
-      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml" "${KAPPA_DATA_COPY_DIR}"
-      COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/particles.yaml" "${KAPPA_DATA_COPY_DIR}"
-      COMMENT "Copying data to ${KAPPA_DATA_COPY_DIR}"
-   )
-endif()
+# set(DATA_INSTALL_DIR "include/kappa++_data")
+# 
+# install(FILES data/interaction.yaml     DESTINATION ${DATA_INSTALL_DIR})
+# install(FILES data/particles.yaml       DESTINATION ${DATA_INSTALL_DIR})
+# 
+# # TODO
+# set(DATA_FILES
+#     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data>$<INSTALL_INTERFACE:${DATA_INSTALL_DIR}>/interaction.yaml"
+#     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data>$<INSTALL_INTERFACE:${DATA_INSTALL_DIR}>/particles.yaml"
+# )
+# message(STATUS "Data files ${DATA_FILES}")
+# set_target_properties(kappa++ PROPERTIES KAPPA_DATA_PATH "${DATA_FILES}")
+# set_property(TARGET kappa++ APPEND PROPERTY EXPORT_PROPERTIES KAPPA_DATA_PATH)
+
+set(RESOURCES_INSTALL_DIR "data")
+set(RESOURCES_FILES_DIR "data")
+set(RESOURCES_FILES "${RESOURCES_FILES_DIR}/interaction.yaml" "${RESOURCES_FILES_DIR}/particles.yaml")
+install(FILES ${RESOURCES_FILES} DESTINATION ${RESOURCES_INSTALL_DIR})
+
+set(KAPPA_RESOURCES_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}" CACHE INTERNAL "")
+message(STATUS "PATH TO RESURCES: ${KAPPA_RESOURCES_FILES_DIR}")
+
+# target_compile_definitions(kappa++ INTERFACE
+#     "KAPPA_RESOURCES_PATH=\"$<IF:$<BOOL:$<TARGET_PROPERTY:kappa++::kappa++,IMPORTED>>,${CMAKE_INSTALL_PREFIX}/${RESOURCES_INSTALL_DIR}/,${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}/>\""
+# )
+# target_compile_definitions(kappa++ INTERFACE
+#     "KAPPA_RESOURCES_PATH=\"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}/>$<INSTALL_INTERFACE:./${RESOURCES_INSTALL_DIR}/>\""
+# )
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    "Config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake"
+    INSTALL_DESTINATION "cmake"
+)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake" DESTINATION "cmake")
+# add_custom_command(TARGET kappa++ POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#     ${CMAKE_CURRENT_SOURCE_DIR}/data
+#     ${CMAKE_CURRENT_BINARY_DIR}/data)
+# if (DEFINED KAPPA_DATA_COPY_DIR)
+#    add_custom_target(copy_resures_files ALL
+#       COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml" "${KAPPA_DATA_COPY_DIR}"
+#       COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/particles.yaml" "${KAPPA_DATA_COPY_DIR}"
+#       COMMENT "Copying data to ${KAPPA_DATA_COPY_DIR}"
+#    )
+# endif()
 
 ################################################################################
 # CTest

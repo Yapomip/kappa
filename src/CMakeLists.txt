@@ -21,18 +21,23 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
   set_property(GLOBAL APPEND PROPERTY "${target}_SRCS" "${SRCS}")
  endfunction()
 
-file(GLOB_RECURSE LIB_SOURCES 
+file(GLOB_RECURSE lib_sources 
     RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    CONFIGURE_DEPENDS
     "approximations/*.cpp"
     "interactions/*.cpp"
     "mixtures/*.cpp"
     "numerics/*.cpp"
     "particles/*.cpp"
 )
-message("${LIB_SOURCES}")
-add_library(kappa++ SHARED ${LIB_SOURCES})
 
-target_link_libraries(kappa++ yaml-cpp armadillo BLAS::BLAS LAPACK::LAPACK)
+# message("${lib_sources}")
+
+add_library(kappa++ SHARED ${lib_sources})
+add_library(kappa++::kappa++ ALIAS kappa++)
+
+target_link_libraries(kappa++ PRIVATE BLAS::BLAS LAPACK::LAPACK yaml-cpp)
+target_link_libraries(kappa++ PUBLIC armadillo)
 
 # target_link_libraries(kappa++ ${OPENBLAS_LIBRARY})
 target_include_directories(kappa++ PUBLIC
@@ -41,20 +46,33 @@ target_include_directories(kappa++ PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mixtures>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/numerics>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/particles>
-    $<INSTALL_INTERFACE:include/kappa++>
+    $<INSTALL_INTERFACE:include>
 )
-message(${CMAKE_CURRENT_SOURCE_DIR})
+# message(${CMAKE_CURRENT_SOURCE_DIR})
 
+foreach(dir approximations interactions mixtures numerics particles)
+    install(DIRECTORY ${dir}
+            DESTINATION include
+            FILES_MATCHING 
+            PATTERN "*.hpp" 
+            PATTERN "*.h"
+    )
+endforeach()
 
-install(TARGETS kappa++ EXPORT kappa++_targets 
+install(
+    TARGETS kappa++ 
+    EXPORT kappa++Targets 
     LIBRARY DESTINATION lib 
     INCLUDES DESTINATION include
 )
-
-install(EXPORT kappa++_targets
-    FILE kappa++Config.cmake
+    
+install(
+    EXPORT kappa++Targets
+    FILE kappa++Targets.cmake
     DESTINATION "cmake"
+    NAMESPACE kappa++::
 )
+
 
 # Evaluate coverage
 if(ENABLE_COVERAGE)
