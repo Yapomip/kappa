@@ -12,6 +12,7 @@ add_executable( basicTest
 
 if(NOT TARGET kappa++)
     find_package(kappa++ REQUIRED)
+    find_package(yaml-cpp REQUIRED)
 endif()
 
 set(ALL_EXAMPLE_TARGETS
@@ -21,9 +22,8 @@ set(ALL_EXAMPLE_TARGETS
 foreach( name ${ALL_EXAMPLE_TARGETS} )
     target_link_libraries( ${name}
         INTERFACE
-            Yaml
             Armadillo
         PRIVATE
-            kappa++
+            kappa++ yaml-cpp::yaml-cpp
     )
 endforeach()

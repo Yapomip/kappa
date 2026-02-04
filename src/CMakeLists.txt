@@ -36,10 +36,9 @@ file(GLOB_RECURSE lib_sources
 add_library(kappa++ SHARED ${lib_sources})
 add_library(kappa++::kappa++ ALIAS kappa++)
 
-target_link_libraries(kappa++ PRIVATE BLAS::BLAS LAPACK::LAPACK yaml-cpp)
+target_link_libraries(kappa++ PRIVATE yaml-cpp)
 target_link_libraries(kappa++ PUBLIC armadillo)
 
-# target_link_libraries(kappa++ ${OPENBLAS_LIBRARY})
 target_include_directories(kappa++ PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/approximations>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/interactions>
@@ -65,7 +64,7 @@ install(
     LIBRARY DESTINATION lib 
     INCLUDES DESTINATION include
 )
-    
+
 install(
     EXPORT kappa++Targets
     FILE kappa++Targets.cmake

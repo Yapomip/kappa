@@ -137,10 +137,10 @@ project(kappa++
 # include_directories(${YAML_INCLUDE_DIRS})
 # LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib)
 
-find_package(LAPACK REQUIRED)
+# find_package(LAPACK REQUIRED)
 # message("${LAPACK_LAPACK_LIBRARIES}")
-
-find_package(BLAS REQUIRED)
+# 
+# find_package(BLAS REQUIRED)
 # message("${BLAS_LIBRARIES}")
 
 find_package(yaml-cpp REQUIRED)

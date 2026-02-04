@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5...3.25)
 
 cmake_policy(SET CMP0110 NEW)
 
@@ -9,7 +9,7 @@ file(GLOB test_sources "test_*.cpp")
 add_executable(run_tests run_tests.cpp ${test_sources})
 target_link_libraries(run_tests
     PRIVATE
-        kappa++
+        kappa++ yaml-cpp::yaml-cpp
     PUBLIC
         Catch2::Catch2
 )
