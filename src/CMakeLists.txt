@@ -11,9 +11,6 @@ file(GLOB_RECURSE lib_sources
     "numerics/*.cpp"
     "particles/*.cpp"
 )
-
-# message("${lib_sources}")
-
 add_library(kappa++ SHARED ${lib_sources})
 add_library(kappa++::kappa++ ALIAS kappa++)
 
@@ -30,7 +27,6 @@ target_include_directories(kappa++ PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/particles>
     $<INSTALL_INTERFACE:include>
 )
-# message(${CMAKE_CURRENT_SOURCE_DIR})
 
 foreach(dir approximations interactions mixtures numerics particles)
     file(GLOB headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CONFIGURE_DEPENDS "${dir}/*.hpp" "${dir}/*.h")

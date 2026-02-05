@@ -12,6 +12,7 @@
 
 #define ARMA_DONT_PRINT_ERRORS // to avoid warning message during solve() linear systems
 
+#define ARMA_WARN_LEVEL 0
 #define ARMA_ALLOW_FAKE_GCC
 #include <armadillo> 
 

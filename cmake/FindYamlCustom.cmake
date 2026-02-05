@@ -1,5 +1,5 @@
 
-find_package(yaml-cpp QUIET)
+find_package(yaml-cpp QUIET PATHS ${yaml-cpp_DIR})
 if(NOT yaml-cpp_FOUND)
    set(YAML_CPP_INSTALL ON CACHE BOOL "Enable installation of yaml-cpp targets" FORCE)
 

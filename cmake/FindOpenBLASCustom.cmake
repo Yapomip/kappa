@@ -1,7 +1,7 @@
 
 find_package(OpenBLAS QUIET PATHS ${OpenBLAS_DIR})
 
-# D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\OpenBLAS\lib\cmake\openblas\OpenBLASConfig.cmake
+# kappa\dependencies\OpenBLAS\lib\cmake\openblas\OpenBLASConfig.cmake
 if(OpenBLAS_FOUND AND NOT TARGET OpenBLAS AND NOT TARGET OpenBLAS::OpenBLAS) 
     get_filename_component(OpenBLAS_ROOT_DIR ${OpenBLAS_INCLUDE_DIRS} DIRECTORY)
     unset(OpenBLAS_INCLUDE_DIRS)

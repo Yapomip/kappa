@@ -45,11 +45,9 @@ or briefly,
 ## CMAKE flags and variables
 ENABLE_TESTING, ENABLE_COVERAGE - ON/OFF for testing and examples build
 
-KAPPA_DATA_COPY - is need to copy files
-    defoult not defined
-KAPPA_DIST_DATA_DIR - dir to copy from /data 
-    defoult value CMAKE_CURRENT_SOURCE_DIR
+yaml-cpp_DIR, OpenBLAS_DIR, Armadillo_DIR - where installed libraryies, on need Windows
 
+KAPPA_RESOURCES_FILES_DIR - where is data, if you use kappa
 
 ## Source code structure
 

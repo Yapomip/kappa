@@ -46,33 +46,33 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 ################################################################################
 
 # Profile
- set(CMAKE_CXX_FLAGS_PROFILE "-g3 -Wall -O3 -DNDEBUG" CACHE STRING
-    "Flags used by the C++ compiler during Profile builds."
-    FORCE )
- set(CMAKE_C_FLAGS_PROFILE "-g3 -Wall -pedantic -O3 -DNDEBUG" CACHE STRING
-    "Flags used by the C compiler during Profile builds."
-    FORCE )
- set(CMAKE_EXE_LINKER_FLAGS_PROFILE
-    "" CACHE STRING
-    "Flags used for linking binaries during Profile builds."
-    FORCE )
- set(CMAKE_SHARED_LINKER_FLAGS_PROFILE
-    "" CACHE STRING
-    "Flags used by the shared libraries linker during Profile builds."
-    FORCE )
- mark_as_advanced(
-    CMAKE_CXX_FLAGS_PROFILE
-    CMAKE_C_FLAGS_PROFILE
-    CMAKE_EXE_LINKER_FLAGS_PROFILE
-    CMAKE_SHARED_LINKER_FLAGS_PROFILE)
+set(CMAKE_CXX_FLAGS_PROFILE "-g3 -Wall -O3 -DNDEBUG" CACHE STRING
+   "Flags used by the C++ compiler during Profile builds."
+   FORCE )
+set(CMAKE_C_FLAGS_PROFILE "-g3 -Wall -pedantic -O3 -DNDEBUG" CACHE STRING
+   "Flags used by the C compiler during Profile builds."
+   FORCE )
+set(CMAKE_EXE_LINKER_FLAGS_PROFILE
+   "" CACHE STRING
+   "Flags used for linking binaries during Profile builds."
+   FORCE )
+set(CMAKE_SHARED_LINKER_FLAGS_PROFILE
+   "" CACHE STRING
+   "Flags used by the shared libraries linker during Profile builds."
+   FORCE )
+mark_as_advanced(
+   CMAKE_CXX_FLAGS_PROFILE
+   CMAKE_C_FLAGS_PROFILE
+   CMAKE_EXE_LINKER_FLAGS_PROFILE
+   CMAKE_SHARED_LINKER_FLAGS_PROFILE)
 
 # Update the documentation string of CMAKE_BUILD_TYPE for GUIs and set the
 # default build type as Release
- if (NOT CMAKE_BUILD_TYPE)
-     SET (CMAKE_BUILD_TYPE "Release" CACHE STRING
-        "Choose the type of build, options are: None Debug Release
-        RelWithDebInfo MinSizeRel Profile." FORCE)
- endif ()
+if (NOT CMAKE_BUILD_TYPE)
+   SET (CMAKE_BUILD_TYPE "Release" CACHE STRING
+      "Choose the type of build, options are: None Debug Release
+      RelWithDebInfo MinSizeRel Profile." FORCE)
+endif ()
 
  #set_property(TARGET tgt PROPERTY CXX_STANDARD 11)
  #add_compile_options(-Wall -Wextra -pedantic -Werror -std=c++11)
@@ -83,147 +83,105 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # set(CMAKE_INSTALL_PREFIX "../install" CACHE STRING
 #    "Install path prefix, prepended onto install directories." FORCE)
- mark_as_advanced(CMAKE_INSTALL_PREFIX)
+mark_as_advanced(CMAKE_INSTALL_PREFIX)
 
- set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm -pg" )
-
- if (CMAKE_COMPILER_IS_GNUCXX)
-
-    set (CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wold-style-cast")
-    set (CMAKE_CXX_FLAGS "-g")
-
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm -g -pg -fopenmp 						             " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/				 " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/yaml-cpp/		 " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/armadillo_bits/" )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/boost/		 " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/approximations/					     " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/interactions/					     " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics/					         " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/mixtures/					         " )
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/particles					         " )
-
- endif ()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm")
+if(KAPPA_PG)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX)
+   set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wold-style-cast")
+   set(CMAKE_CXX_FLAGS "-g")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm -g -fopenmp ")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/yaml-cpp")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/armadillo_bits")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/boost")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/approximations")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/interactions")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/mixtures")
+   # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/particles")
+endif ()
 
 ################################################################################
 # Doxygen documentation generation
 ################################################################################
- option (BUILD_DOCUMENTATION
-    "Use Doxygen to create the HTML based API documentation" OFF)
+option (BUILD_DOCUMENTATION
+   "Use Doxygen to create the HTML based API documentation" OFF)
 
- if (BUILD_DOCUMENTATION)
-    FIND_PACKAGE(Doxygen)
+if (BUILD_DOCUMENTATION)
+   FIND_PACKAGE(Doxygen)
 
-    if (NOT DOXYGEN_FOUND)
-        message(FATAL_ERROR
-            "Doxygen is needed to build the documentation. Please install it
-             correctly")
-    endif()
-    # Configure the Template Doxyfile for our specific project
-    configure_file(Doxyfile.in
-                    ${PROJECT_BINARY_DIR}/Doxyfile  @ONLY IMMEDIATE)
-    # Add a custom target to run Doxygen when ever the project is built
-    add_custom_target (docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/Doxyfile
-        SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
- endif()
+   if (NOT DOXYGEN_FOUND)
+      message(FATAL_ERROR
+         "Doxygen is needed to build the documentation. Please install it
+            correctly")
+   endif()
+   # Configure the Template Doxyfile for our specific project
+   configure_file(Doxyfile.in
+                  ${PROJECT_BINARY_DIR}/Doxyfile  @ONLY IMMEDIATE)
+   # Add a custom target to run Doxygen when ever the project is built
+   add_custom_target (docs
+      COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_BINARY_DIR}/Doxyfile
+      SOURCES ${PROJECT_BINARY_DIR}/Doxyfile)
+endif()
 
 #################################################################################
 # Find the required packages: OpenBLAS(Blas, Lapack), Armadillo, Yaml-cpp, Boost
 #################################################################################
 
-# add_library(Yaml INTERFACE IMPORTED)
-# set_property(TARGET Yaml PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${YAML_INCLUDE_DIR})
-# include_directories(${YAML_INCLUDE_DIRS})
-# LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib)
+if (NOT yaml-cpp_DIR)
+   set(yaml-cpp_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/yaml")
+endif()
+# find_package(YamlCustom REQUIRED)
+find_package(yaml-cpp QUIET PATHS ${yaml-cpp_DIR})
+message(STATUS "YAML_CPP_DIR ${yaml-cpp_DIR}")
 
-
-# list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS/lib")
-# cmake .. \
-# -DCMAKE_SYSTEM_LIBRARY_PATH="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\OpenBLAS\lib" \
-# -D OPENBLAS_PROVIDES_LAPACK=true -D CMAKE_INSTALL_PREFIX="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma" \
-# -D CMAKE_CXX_FLAGS="-DMY_MACRO -DOTHER_VAL=1"
-
-# cmake --build . --config Release --parallel 8
-# cmake --install . --prefix D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma
-
-# find_package(LAPACK REQUIRED)
-# message("${LAPACK_LAPACK_LIBRARIES}")
-
-find_package(YamlCustom REQUIRED)
-message(STATUS "YAML_CPP_DIR ${YAML_CPP_DIR}")
 
 # Where OpenBLASConfid.cmake is
-set(OpenBLAS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS/lib/cmake/openblas")
+if (NOT OpenBLAS_DIR)
+   set(OpenBLAS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS")
+endif()
 find_package(OpenBLASCustom REQUIRED)
 message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
 
 # Where ArmadilloConfid.cmake is
-set(Armadillo_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma/share/Armadillo/CMake")
+if (NOT Armadillo_DIR)
+   set(Armadillo_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma")
+endif()
 find_package(Armadillo REQUIRED HINTS ${Armadillo_DIR})
-message(STATUS "ARMADILLO_DIR ${ARMADILLO_DIR}")
-
-# find_package(Armadillo REQUIRED)
-# add_library(Armadillo INTERFACE IMPORTED)
-# set_property(TARGET Armadillo PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ARMADILLO_INCLUDE_DIR})
-# include_directories(${ARMADILLO_INCLUDE_DIRS})
-# LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib64)
+message(STATUS "Armadillo_DIR ${Armadillo_DIR}")
 
 ################################################################################
 # Source code
 ################################################################################
- option(ENABLE_COVERAGE "Generate coverage for codecov.io" OFF)
- list(APPEND LCOV_REMOVE_PATTERNS
-     "'*/tests/*'"
- )
- include(CodeCoverage)
 
-# Descend into the src directory to build all targets and libraries
-# include_directories(
-#    ${CMAKE_CURRENT_SOURCE_DIR}/src/approximations
-#    ${CMAKE_CURRENT_SOURCE_DIR}/src/interactions
-#    ${CMAKE_CURRENT_SOURCE_DIR}/src/mixtures
-#    ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics
-#    ${CMAKE_CURRENT_SOURCE_DIR}/src/particles)
+option(ENABLE_COVERAGE "Generate coverage for codecov.io" OFF)
+list(APPEND LCOV_REMOVE_PATTERNS
+   "'*/tests/*'"
+)
+include(CodeCoverage)
+
 add_subdirectory(src)
 
 ################################################################################
 # Install the data directory in the install folder
 ################################################################################
 
-# set(DATA_INSTALL_DIR "include/kappa++_data")
-# 
-# install(FILES data/interaction.yaml     DESTINATION ${DATA_INSTALL_DIR})
-# install(FILES data/particles.yaml       DESTINATION ${DATA_INSTALL_DIR})
-# 
-# # TODO
-# set(DATA_FILES
-#     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data>$<INSTALL_INTERFACE:${DATA_INSTALL_DIR}>/interaction.yaml"
-#     "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/data>$<INSTALL_INTERFACE:${DATA_INSTALL_DIR}>/particles.yaml"
-# )
-# message(STATUS "Data files ${DATA_FILES}")
-# set_target_properties(kappa++ PROPERTIES KAPPA_DATA_PATH "${DATA_FILES}")
-# set_property(TARGET kappa++ APPEND PROPERTY EXPORT_PROPERTIES KAPPA_DATA_PATH)
-
 set(RESOURCES_INSTALL_DIR "data")
 set(RESOURCES_FILES_DIR "data")
 set(RESOURCES_FILES "${RESOURCES_FILES_DIR}/interaction.yaml" "${RESOURCES_FILES_DIR}/particles.yaml")
 install(FILES ${RESOURCES_FILES} DESTINATION ${RESOURCES_INSTALL_DIR})
 
-set(KAPPA_RESOURCES_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}" CACHE INTERNAL "")
-message(STATUS "PATH TO RESURCES: ${KAPPA_RESOURCES_FILES_DIR}")
+set(KAPPA_RESOURCES_FILES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}" CACHE INTERNAL "where is kappa/data")
+message(STATUS "Path to resources ${KAPPA_RESOURCES_FILES_DIR}")
 
-# target_compile_definitions(kappa++ INTERFACE
-#     "KAPPA_RESOURCES_PATH=\"$<IF:$<BOOL:$<TARGET_PROPERTY:kappa++::kappa++,IMPORTED>>,${CMAKE_INSTALL_PREFIX}/${RESOURCES_INSTALL_DIR}/,${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}/>\""
-# )
-# target_compile_definitions(kappa++ INTERFACE
-#     "KAPPA_RESOURCES_PATH=\"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${RESOURCES_FILES_DIR}/>$<INSTALL_INTERFACE:./${RESOURCES_INSTALL_DIR}/>\""
-# )
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
-    "Config.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake"
-    INSTALL_DESTINATION "cmake"
+   "Config.cmake.in"
+   "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake"
+   INSTALL_DESTINATION "cmake"
 )
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake" DESTINATION "cmake")
 # On Windows need to copy libopenblas.dll to exe who use kappa++
@@ -232,26 +190,15 @@ if (WIN32)
    message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
    install(FILES "cmake/FindOpenBLASCustom.cmake" DESTINATION "cmake")
 endif()
-# add_custom_command(TARGET kappa++ POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     ${CMAKE_CURRENT_SOURCE_DIR}/data
-#     ${CMAKE_CURRENT_BINARY_DIR}/data)
-# if (DEFINED KAPPA_DATA_COPY_DIR)
-#    add_custom_target(copy_resures_files ALL
-#       COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/interaction.yaml" "${KAPPA_DATA_COPY_DIR}"
-#       COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/data/particles.yaml" "${KAPPA_DATA_COPY_DIR}"
-#       COMMENT "Copying data to ${KAPPA_DATA_COPY_DIR}"
-#    )
-# endif()
 
 ################################################################################
 # CTest
 ################################################################################
- option (ENABLE_TESTING "Enable regression testing with CTest" OFF)
+option (ENABLE_TESTING "Enable regression testing with CTest" OFF)
 
- if (ENABLE_TESTING OR ENABLE_COVERAGE)
-    find_package(Catch2)
-    enable_testing()
-    add_subdirectory(tests)
-    add_subdirectory(examples)
- endif()
+if (ENABLE_TESTING OR ENABLE_COVERAGE)
+   find_package(Catch2)
+   enable_testing()
+   add_subdirectory(tests)
+   add_subdirectory(examples)
+endif()

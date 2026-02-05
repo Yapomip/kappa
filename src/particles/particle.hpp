@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#define ARMA_WARN_LEVEL 0
 #define ARMA_ALLOW_FAKE_GCC
 #include <armadillo>
 
