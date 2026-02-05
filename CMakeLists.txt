@@ -30,7 +30,7 @@ cmake_minimum_required(VERSION 3.5...3.25)
 cmake_policy(SET CMP0048 NEW)
 # Enable IPO for CMake versions that support it
 #cmake_policy(SET CMP0069 NEW)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(kappa++
@@ -39,7 +39,7 @@ project(kappa++
 )
 
 # Add include path for cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ################################################################################
 # Build types
@@ -139,31 +139,29 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 
 # list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS/lib")
-# cmake .. -DCMAKE_SYSTEM_LIBRARY_PATH="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\OpenBLAS\lib" -D OPENBLAS_PROVIDES_LAPACK=true -D CMAKE_INSTALL_PREFIX="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma"
+# cmake .. \
+# -DCMAKE_SYSTEM_LIBRARY_PATH="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\OpenBLAS\lib" \
+# -D OPENBLAS_PROVIDES_LAPACK=true -D CMAKE_INSTALL_PREFIX="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma" \
+# -D CMAKE_CXX_FLAGS="-DMY_MACRO -DOTHER_VAL=1"
+
+# cmake --build . --config Release --parallel 8
 # cmake --install . --prefix D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma
 
 # find_package(LAPACK REQUIRED)
 # message("${LAPACK_LAPACK_LIBRARIES}")
-# 
-# find_package(BLAS REQUIRED)
-# message("${BLAS_LIBRARIES}")
 
-find_package(Armadillo REQUIRED PATHS ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma/share/Armadillo/CMake)
-message(STATUS "ARMADILLO_LIBRARIES ${ARMADILLO_LIBRARIES}")
+find_package(YamlCustom REQUIRED)
+message(STATUS "YAML_CPP_DIR ${YAML_CPP_DIR}")
 
-find_package(yaml-cpp QUIET)
-if (NOT yaml-cpp_FOUND)
-   set(YAML_CPP_INSTALL ON CACHE BOOL "Enable installation of yaml-cpp targets" FORCE)
+# Where OpenBLASConfid.cmake is
+set(OpenBLAS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS/lib/cmake/openblas")
+find_package(OpenBLASCustom REQUIRED)
+message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
 
-   include(FetchContent)
-   FetchContent_Declare(
-      yaml-cpp
-      GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-      GIT_TAG f0329d0efd2e62ceda5ee899c343ee445f6f7bd2
-   )
-   FetchContent_MakeAvailable(yaml-cpp)
-endif()
-message(STATUS "YAML_CPP_LIBRARIES ${YAML_CPP_LIBRARIES}")
+# Where ArmadilloConfid.cmake is
+set(Armadillo_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma/share/Armadillo/CMake")
+find_package(Armadillo REQUIRED HINTS ${Armadillo_DIR})
+message(STATUS "ARMADILLO_DIR ${ARMADILLO_DIR}")
 
 # find_package(Armadillo REQUIRED)
 # add_library(Armadillo INTERFACE IMPORTED)
@@ -181,13 +179,13 @@ message(STATUS "YAML_CPP_LIBRARIES ${YAML_CPP_LIBRARIES}")
  include(CodeCoverage)
 
 # Descend into the src directory to build all targets and libraries
- include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/approximations
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/interactions
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/mixtures
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/particles)
- add_subdirectory(src)
+# include_directories(
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/approximations
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/interactions
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/mixtures
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics
+#    ${CMAKE_CURRENT_SOURCE_DIR}/src/particles)
+add_subdirectory(src)
 
 ################################################################################
 # Install the data directory in the install folder
@@ -228,6 +226,12 @@ configure_package_config_file(
     INSTALL_DESTINATION "cmake"
 )
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake" DESTINATION "cmake")
+# On Windows need to copy libopenblas.dll to exe who use kappa++
+if (WIN32)
+   set(OpenBLAS_DIR ${OpenBLAS_ROOT_DIR})
+   message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
+   install(FILES "cmake/FindOpenBLASCustom.cmake" DESTINATION "cmake")
+endif()
 # add_custom_command(TARGET kappa++ POST_BUILD
 #     COMMAND ${CMAKE_COMMAND} -E copy_directory
 #     ${CMAKE_CURRENT_SOURCE_DIR}/data

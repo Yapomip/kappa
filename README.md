@@ -35,6 +35,9 @@ The main features of KAPPA code are the following:
 Detailed information about installation can be found at:
 https://github.com/lkampoli/kappa/wiki/HOWTO.
 
+On windows plan of installation
+[Windows plan](InstallOnWindow.md)
+
 or briefly, 
 
 `sudo apt-get install libopenblas-dev libarmadillo-dev libyaml-cpp-dev catch`

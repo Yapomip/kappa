@@ -3,11 +3,13 @@
 include("${CMAKE_CURRENT_LIST_DIR}/kappa++Targets.cmake")
 set_and_check(KAPPA_RESOURCES_FILES_DIR "${PACKAGE_PREFIX_DIR}/@RESOURCES_FILES_DIR@")
 
-include(CMakeFindDependencyMacro)
-find_dependency(BLAS REQUIRED)
-find_dependency(LAPACK REQUIRED)
-find_dependency(yaml-cpp REQUIRED)
-find_dependency(Armadillo REQUIRED)
+set_and_check(Armadillo_DIR "@Armadillo_DIR@")
+set_and_check(OpenBLAS_DIR "@OpenBLAS_DIR@")
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+
+include(CMakeFindDependencyMacro)
+find_dependency(Armadillo REQUIRED HINTS Armadillo_DIR)
+find_dependency(OpenBLASCustom REQUIRED)
 
 check_required_components(kappa++)
