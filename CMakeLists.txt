@@ -26,7 +26,7 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with KAPPA. If not, see <http://www.gnu.org/licenses/>.
 #
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5...3.25)
 cmake_policy(SET CMP0048 NEW)
 # Enable IPO for CMake versions that support it
 #cmake_policy(SET CMP0069 NEW)
@@ -39,7 +39,7 @@ project(kappa++
 )
 
 # Add include path for cmake modules
- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 ################################################################################
 # Build types
@@ -137,17 +137,33 @@ project(kappa++
 # include_directories(${YAML_INCLUDE_DIRS})
 # LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/lib)
 
+
+# list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS/lib")
+# cmake .. -DCMAKE_SYSTEM_LIBRARY_PATH="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\OpenBLAS\lib" -D OPENBLAS_PROVIDES_LAPACK=true -D CMAKE_INSTALL_PREFIX="D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma"
+# cmake --install . --prefix D:\!proga_institut\2025_spbu_coursework\rust\kappa\dependencies\arma
+
 # find_package(LAPACK REQUIRED)
 # message("${LAPACK_LAPACK_LIBRARIES}")
 # 
 # find_package(BLAS REQUIRED)
 # message("${BLAS_LIBRARIES}")
 
-find_package(yaml-cpp REQUIRED)
-# message("${YAML_CPP_LIBRARIES}")
+find_package(Armadillo REQUIRED PATHS ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma/share/Armadillo/CMake)
+message(STATUS "ARMADILLO_LIBRARIES ${ARMADILLO_LIBRARIES}")
 
-find_package(Armadillo REQUIRED)
-# message("${ARMADILLO_LIBRARIES}")
+find_package(yaml-cpp QUIET)
+if (NOT yaml-cpp_FOUND)
+   set(YAML_CPP_INSTALL ON CACHE BOOL "Enable installation of yaml-cpp targets" FORCE)
+
+   include(FetchContent)
+   FetchContent_Declare(
+      yaml-cpp
+      GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+      GIT_TAG f0329d0efd2e62ceda5ee899c343ee445f6f7bd2
+   )
+   FetchContent_MakeAvailable(yaml-cpp)
+endif()
+message(STATUS "YAML_CPP_LIBRARIES ${YAML_CPP_LIBRARIES}")
 
 # find_package(Armadillo REQUIRED)
 # add_library(Armadillo INTERFACE IMPORTED)

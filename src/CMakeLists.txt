@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.5...3.25)
 # Add sources for a target
 #  ADD_SOURCES(<target> <source1> [<source2> ...])
  function (add_sources target)
@@ -62,6 +62,7 @@ install(
     TARGETS kappa++ 
     EXPORT kappa++Targets 
     LIBRARY DESTINATION lib 
+    ARCHIVE DESTINATION lib 
     INCLUDES DESTINATION include
 )
 
