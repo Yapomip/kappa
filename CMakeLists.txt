@@ -27,7 +27,7 @@
 # License along with KAPPA. If not, see <http://www.gnu.org/licenses/>.
 #
 cmake_minimum_required(VERSION 3.5...3.25)
-cmake_policy(SET CMP0048 NEW)
+
 # Enable IPO for CMake versions that support it
 # cmake_policy(SET CMP0069 NEW)
 set(CMAKE_CXX_STANDARD 14)
@@ -74,16 +74,9 @@ if (NOT CMAKE_BUILD_TYPE)
         RelWithDebInfo MinSizeRel Profile." FORCE)
 endif ()
 
-#set_property(TARGET tgt PROPERTY CXX_STANDARD 11)
-#add_compile_options(-Wall -Wextra -pedantic -Werror -std=c++11)
-
 ################################################################################
 # Install prefix settings
 ################################################################################
-
-# set(CMAKE_INSTALL_PREFIX "../install" CACHE STRING
-#    "Install path prefix, prepended onto install directories." FORCE)
-mark_as_advanced(CMAKE_INSTALL_PREFIX)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm")
 if(KAPPA_PG)
@@ -93,15 +86,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wold-style-cast")
     set(CMAKE_CXX_FLAGS "-g")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -lm -g -fopenmp ")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/yaml-cpp")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/armadillo_bits")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/kappa_deps/x86_64/include/boost")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/approximations")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/interactions")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/numerics")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/mixtures")
-    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I ${CMAKE_CURRENT_SOURCE_DIR}/src/particles")
 endif ()
 
 ################################################################################
@@ -131,27 +115,33 @@ endif()
 # Find the required packages: OpenBLAS(Blas, Lapack), Armadillo, Yaml-cpp, Boost
 #################################################################################
 
-if (NOT yaml-cpp_DIR)
+if (WIN32 AND NOT yaml-cpp_DIR)
     set(yaml-cpp_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/yaml")
 endif()
-# find_package(YamlCustom REQUIRED)
-find_package(yaml-cpp QUIET PATHS ${yaml-cpp_DIR})
+find_package(YamlCustom REQUIRED)
+# find_package(yaml-cpp REQUIRED PATHS ${yaml-cpp_DIR})
 message(STATUS "YAML_CPP_DIR ${yaml-cpp_DIR}")
 
 
 # Where OpenBLASConfid.cmake is
-if (NOT OpenBLAS_DIR)
+if (WIN32 AND NOT OpenBLAS_DIR)
     set(OpenBLAS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS")
 endif()
 find_package(OpenBLASCustom REQUIRED)
 message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
 
 # Where ArmadilloConfid.cmake is
-if (NOT Armadillo_DIR)
+if (WIN32 AND NOT Armadillo_DIR)
     set(Armadillo_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma")
 endif()
-find_package(Armadillo REQUIRED HINTS ${Armadillo_DIR})
+find_package(ArmadilloCustom REQUIRED)
 message(STATUS "Armadillo_DIR ${Armadillo_DIR}")
+
+# On Windows need to copy libopenblas.dll to exe who use kappa++
+message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
+message(STATUS "Armadillo_DIR ${Armadillo_DIR}")
+install(FILES "cmake/FindOpenBLASCustom.cmake" DESTINATION "cmake")
+install(FILES "cmake/FindArmadilloCustom.cmake" DESTINATION "cmake")
 
 ################################################################################
 # Source code
@@ -184,12 +174,6 @@ configure_package_config_file(
     INSTALL_DESTINATION "cmake"
 )
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/kappa++Config.cmake" DESTINATION "cmake")
-# On Windows need to copy libopenblas.dll to exe who use kappa++
-if (WIN32)
-    set(OpenBLAS_DIR ${OpenBLAS_ROOT_DIR})
-    message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
-    install(FILES "cmake/FindOpenBLASCustom.cmake" DESTINATION "cmake")
-endif()
 
 ################################################################################
 # CTest
