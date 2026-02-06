@@ -9,7 +9,7 @@ set(OpenBLAS_DIR "@OpenBLAS_DIR@")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
 
 include(CMakeFindDependencyMacro)
-find_dependency(Armadillo REQUIRED)
+find_dependency(ArmadilloCustom REQUIRED)
 find_dependency(OpenBLASCustom REQUIRED)
 
 check_required_components(kappa++)

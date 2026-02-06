@@ -6,7 +6,7 @@ if(OpenBLAS_FOUND AND NOT TARGET OpenBLAS::OpenBLAS)
     if(WIN32)
         get_filename_component(OpenBLAS_ROOT_DIR ${OpenBLAS_INCLUDE_DIRS} DIRECTORY)
 
-        add_library(OpenBLAS::OpenBLAS UNKNOWN IMPORTED)
+        add_library(OpenBLAS::OpenBLAS SHARED IMPORTED)
         set_target_properties(OpenBLAS::OpenBLAS PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES "${OpenBLAS_ROOT_DIR}/include"
             IMPORTED_IMPLIB "${OpenBLAS_ROOT_DIR}/lib/libopenblas.lib"

@@ -120,7 +120,7 @@ if (WIN32 AND NOT yaml-cpp_DIR)
 endif()
 find_package(YamlCustom REQUIRED)
 # find_package(yaml-cpp REQUIRED PATHS ${yaml-cpp_DIR})
-message(STATUS "YAML_CPP_DIR ${yaml-cpp_DIR}")
+message(STATUS "yaml-cpp_DIR ${yaml-cpp_DIR}")
 
 
 # Where OpenBLASConfid.cmake is
@@ -128,16 +128,17 @@ if (WIN32 AND NOT OpenBLAS_DIR)
     set(OpenBLAS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenBLAS")
 endif()
 find_package(OpenBLASCustom REQUIRED)
-message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
+message(STATUS "OpenBLAS_LIBRARIES ${OpenBLAS_LIBRARIES}")
 
 # Where ArmadilloConfid.cmake is
 if (WIN32 AND NOT Armadillo_DIR)
     set(Armadillo_DIR "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/arma")
 endif()
 find_package(ArmadilloCustom REQUIRED)
-message(STATUS "Armadillo_DIR ${Armadillo_DIR}")
+message(STATUS "ARMADILLO_LIBRARY_DIRS ${ARMADILLO_LIBRARY_DIRS}")
 
 # On Windows need to copy libopenblas.dll to exe who use kappa++
+message(STATUS "Install find cmake with")
 message(STATUS "OpenBLAS_DIR ${OpenBLAS_DIR}")
 message(STATUS "Armadillo_DIR ${Armadillo_DIR}")
 install(FILES "cmake/FindOpenBLASCustom.cmake" DESTINATION "cmake")
